@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import Ticket, { TicketProps } from "../components/Ticket";
 import prisma from "../../lib/prisma";
 import { Box, Heading, VStack } from "@chakra-ui/react";
+import { logger } from "@lib/logger";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.ticket.findMany({
@@ -28,6 +29,9 @@ type Props = {
 };
 
 const TicketFeed: React.FC<Props> = (props) => {
+
+  logger.debug('PROPS', props)
+
   return (
     <Layout>
       <Box className="page" pt={5}>
