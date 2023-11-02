@@ -19,10 +19,9 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     },
   });
-  console.error('feed', feed)
   return {
     props: { feed },
-    revalidate: 60,
+    revalidate: 1,
   };
 };
 
