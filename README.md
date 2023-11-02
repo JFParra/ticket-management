@@ -11,7 +11,7 @@ NextJS app using:
 - [ChakraUI](https://chakra-ui.com/)
 - [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
 
-Note that the app uses a mix of server-side rendering with `getServerSideProps` (SSR) and static site generation with `getStaticProps` (SSG). When possible, SSG is used to make database queries already at build-time (e.g. when fetching the [Ticket feed](./pages/index.tsx)).
+Note that the app uses a mix of server-side rendering with `getServerSideProps` (SSR) and static site generation with `getStaticProps` (SSG). When possible, SSG is used to make database queries already at build-time (e.g. when fetching the [Ticket feed](./src/pages/index.tsx)).
 
 # Install & run
 
