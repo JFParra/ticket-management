@@ -22,6 +22,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: { feed },
     revalidate: 1,
+    useCdn: false
   };
 };
 
