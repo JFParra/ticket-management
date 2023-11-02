@@ -19,7 +19,9 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     },
   });
+  console.error('feed', feed)
   return {
+    
     props: { feed },
   };
 };
@@ -30,7 +32,7 @@ type Props = {
 
 const TicketFeed: React.FC<Props> = (props) => {
 
-  logger.debug('PROPS', props)
+  console.error('PROPS', props)
 
   return (
     <Layout>
