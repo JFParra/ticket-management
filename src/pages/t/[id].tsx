@@ -12,7 +12,6 @@ import {
   Stack,
   Flex,
 } from "@chakra-ui/react";
-import { logger } from "@lib/logger";
 
 export const getServerSideProps: GetServerSideProps = async ({
   params,
@@ -40,7 +39,6 @@ async function deleteTicket(id: number): Promise<void> {
 }
 
 const Ticket: React.FC<TicketProps> = (props) => {
-  logger.debug("PROPS", props);
   const title = props.title;
   const content = props.content;
   const authorName = props.author

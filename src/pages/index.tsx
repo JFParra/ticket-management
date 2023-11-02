@@ -4,8 +4,6 @@ import Layout from "../components/Layout";
 import Ticket, { TicketProps } from "../components/Ticket";
 import prisma from "../../lib/prisma";
 import { Box, Button, Heading, Link, VStack } from "@chakra-ui/react";
-import { logger } from "@lib/logger";
-import useSWR from "swr";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.ticket.findMany({
