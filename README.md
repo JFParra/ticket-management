@@ -13,6 +13,19 @@ NextJS app using:
 
 Note that the app uses a mix of server-side rendering with `getServerSideProps` (SSR) and static site generation with `getStaticProps` (SSG). When possible, SSG is used to make database queries already at build-time (e.g. when fetching the [Ticket feed](./src/pages/index.tsx)).
 
+# DB Configuration
+
+Push DB schemas
+
+```
+nvm use 18
+```
+
+```
+npx prisma db push
+```
+
+
 # Install & run
 
 node version
@@ -40,7 +53,7 @@ run
 yarn dev
 ```
 
-build
+build / prisma generate
 
 ```
 yarn build
