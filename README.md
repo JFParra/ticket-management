@@ -15,21 +15,33 @@ Note that the app uses a mix of server-side rendering with `getServerSideProps` 
 
 # Install & run
 
+node version
+
+```
+nvm use 18
+```
+
 install
 
 ```
-git clone
+git clone https://github.com/JFParra/ticket-management.git
 yarn install
 ```
 
 copy environment and fill in with your data
 
 ```
-cp .env .env.local
+cp .env
 ```
 
 run
 
 ```
 yarn dev
+```
+
+build
+
+```
+yarn build
 ```
