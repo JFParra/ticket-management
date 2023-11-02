@@ -3,11 +3,13 @@ import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
 import Ticket, { TicketProps } from "../components/Ticket";
 import prisma from "../../lib/prisma";
-import { Box, Heading, VStack } from "@chakra-ui/react";
+import { Box, Button, Heading, Link, VStack } from "@chakra-ui/react";
 import { logger } from "@lib/logger";
+import useSWR from "swr";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.ticket.findMany({
+    
     where: {
       published: true,
     },
@@ -22,7 +24,6 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: { feed },
     revalidate: 1,
-    useCdn: false
   };
 };
 
@@ -31,11 +32,11 @@ type Props = {
 };
 
 const TicketFeed: React.FC<Props> = (props) => {
-
-  console.error('PROPS', props)
-
   return (
     <Layout>
+      <Link href="/">
+        <Button>Refresh</Button>
+      </Link>
       <Box className="page" pt={5}>
         <Heading>Ticket Feed</Heading>
         <VStack mt={5} spacing={5}>
