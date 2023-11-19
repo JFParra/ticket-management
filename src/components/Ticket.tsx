@@ -1,7 +1,21 @@
 import React from "react";
 import Router from "next/router";
 import MarkDown from "react-markdown";
-import { Heading, Box, Badge } from "@chakra-ui/react";
+import {
+  Heading,
+  Box,
+  Badge,
+  Card,
+  CardHeader,
+  CardBody,
+  Text,
+  CardFooter,
+  Button,
+  Stack,
+  StackDivider,
+  HStack,
+  Spacer,
+} from "@chakra-ui/react";
 
 export type TicketProps = {
   id: number;
@@ -29,26 +43,57 @@ export const determineBadgeColor = (status: string) => {
 };
 
 const Ticket: React.FC<{ ticket: TicketProps }> = ({ ticket }) => {
-  const authorName = ticket.author
-    ? ticket.author.name
-    : "Unknown author";
+  const authorName = ticket.author ? ticket.author.name : "Unknown author";
   const color = determineBadgeColor(ticket.status);
   return (
-    <Box
-      p={5}
-      border="1px solid"
-      borderColor="gray.500"
-      borderRadius="md"
-      onClick={() => Router.push("/t/[id]", `/t/${ticket.id}`)}
-    >
-      <Badge colorScheme={color}>{ticket.status}</Badge>
-      <Heading size="md">Title: {ticket.title}</Heading>
-      <MarkDown>{ticket.content}</MarkDown>
-      {ticket?.response && (
-        <Heading size="md">Response: {ticket.response}</Heading>
-      )}
-      <Heading size="sm">By: {authorName}</Heading>
-    </Box>
+    <>
+      <Card
+        p={5}
+        border="1px solid"
+        borderColor="gray.500"
+        borderRadius="md"
+        onClick={() => Router.push("/t/[id]", `/t/${ticket.id}`)}
+      >
+        <CardHeader>
+          <HStack>
+            <Badge colorScheme={color}>{ticket.status}</Badge>
+            <Spacer />
+
+            <Heading size="xs" textTransform="uppercase">
+              ID: {ticket.id}
+            </Heading>
+          </HStack>
+
+          <Heading size="md">Title: {ticket.title}</Heading>
+        </CardHeader>
+
+        <CardBody>
+          <Stack divider={<StackDivider />} spacing="4">
+            <Box>
+              <Heading size="xs" textTransform="uppercase">
+                Description
+              </Heading>
+              <MarkDown>{ticket.content}</MarkDown>
+            </Box>
+            <Box>
+              <Heading size="xs" textTransform="uppercase">
+                Response
+              </Heading>
+              {ticket?.response && <Text size="md">{ticket.response}</Text>}
+            </Box>
+            <Box>
+              <Heading size="xs" textTransform="uppercase">
+                Author
+              </Heading>
+              <Text size="md">{authorName}</Text>
+            </Box>
+          </Stack>
+        </CardBody>
+        <CardFooter>
+          <Button colorScheme="purple">Edit</Button>
+        </CardFooter>
+      </Card>
+    </>
   );
 };
 

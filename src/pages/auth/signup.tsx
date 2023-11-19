@@ -112,10 +112,10 @@ export default function SignupCard() {
                     size="lg"
                     type="submit"
                     isLoading={isSubmitting}
-                    bg={"blue.400"}
+                    bg={"purple.400"}
                     color={"white"}
                     _hover={{
-                      bg: "blue.500",
+                      bg: "purple.500",
                     }}
                   >
                     Sign up
@@ -124,7 +124,7 @@ export default function SignupCard() {
                 <Stack pt={6}>
                   <Text align={"center"}>
                     Already a user?{" "}
-                    <Link color={"blue.400"} href="signin">
+                    <Link color={"purple.400"} href="signin">
                       Sign in
                     </Link>
                   </Text>

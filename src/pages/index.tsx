@@ -3,11 +3,18 @@ import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
 import Ticket, { TicketProps } from "../components/Ticket";
 import prisma from "../../lib/prisma";
-import { Box, Button, Heading, Link, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  Link,
+  SimpleGrid,
+  Spacer,
+  VStack,
+} from "@chakra-ui/react";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.ticket.findMany({
-    
     where: {
       published: true,
     },
@@ -33,22 +40,18 @@ const TicketFeed: React.FC<Props> = (props) => {
   return (
     <Layout>
       <Link href="/">
-        <Button>Refresh</Button>
+        <Button colorScheme="purple">Refresh</Button>
       </Link>
       <Box className="page" pt={5}>
         <Heading>Ticket Feed</Heading>
-        <VStack mt={5} spacing={5}>
+        <SimpleGrid
+          spacing={10}
+          templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+        >
           {props.feed.map((ticket) => (
-            <Box
-              key={ticket.id}
-              w="full"
-              shadow="lg"
-              _active={{ shadow: "unset" }}
-            >
-              <Ticket ticket={ticket} />
-            </Box>
+            <Ticket key={ticket.id} ticket={ticket} />
           ))}
-        </VStack>
+        </SimpleGrid>
       </Box>
     </Layout>
   );

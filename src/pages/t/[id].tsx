@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import MarkDown from "react-markdown";
 import Layout from "../../components/Layout";
 import Router from "next/router";
-import { TicketProps } from "../../components/Ticket";
+import { TicketProps, determineBadgeColor } from "../../components/Ticket";
 import prisma from "../../../lib/prisma";
 import {
   Heading,
@@ -11,11 +11,24 @@ import {
   Button,
   Stack,
   Flex,
+  Badge,
+  Text,
+  Box,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  HStack,
+  Spacer,
+  StackDivider,
+  FormControl,
+  VStack,
+  Textarea,
+  FormLabel,
 } from "@chakra-ui/react";
+import ticket from "../api/ticket";
 
-export const getServerSideProps: GetServerSideProps = async ({
-  params,
-}) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const ticket = await prisma.ticket.findUnique({
     where: {
       id: Number(params?.id) || -1,
@@ -41,12 +54,12 @@ async function deleteTicket(id: number): Promise<void> {
 const Ticket: React.FC<TicketProps> = (props) => {
   const title = props.title;
   const content = props.content;
-  const authorName = props.author
-    ? props.author.name
-    : "Unknown author";
+  const authorName = props.author ? props.author.name : "Unknown author";
   const status = props.status;
   const isResolved = status == "resolved";
   const responseInit = props.response == null ? "" : props.response;
+  const color = determineBadgeColor(status);
+  const id = props.id;
 
   const [response, setResponse] = useState(responseInit);
   const [updatedStatus, setStatus] = useState("");
@@ -71,80 +84,92 @@ const Ticket: React.FC<TicketProps> = (props) => {
 
   return (
     <Layout>
-      <Flex>
-        <form onSubmit={submitData}>
+      <Card p={5} border="1px solid" borderColor="gray.500" borderRadius="md">
+        <CardHeader>
+          <HStack>
+            <Badge colorScheme={color}>{status}</Badge>
+            <Spacer />
+
+            <Heading size="xs" textTransform="uppercase">
+              ID: {id}
+            </Heading>
+          </HStack>
+
           <Heading size="md">Title: {title}</Heading>
-          <MarkDown>{content}</MarkDown>
-          <Heading size="sm">By: {authorName}</Heading>
-          {isResolved && (
-            <Heading size="md">Response: {response}</Heading>
-          )}
-          {!isResolved && (
-            <Select
-              onChange={(e) => setStatus(e.target.value)}
-              placeholder="Select option"
-              value={updatedStatus}
-            >
-              <option value="new">New</option>
-              <option value="inprogress">In Progress</option>
-              <option value="resolved">Resolved</option>
-            </Select>
-          )}
-          {!isResolved && (
-            <textarea
-              cols={50}
-              onChange={(e) => setResponse(e.target.value)}
-              placeholder="Typical response"
-              rows={8}
-              value={response}
-            />
-          )}
-          <Stack>
-            {!isResolved && (
-              <Button
-                disabled={!updatedStatus || !response}
-                type="submit"
-              >
-                Respond
-              </Button>
-            )}
-            <Button onClick={() => Router.push("/")}>Cancel</Button>
+        </CardHeader>
+
+        <CardBody>
+          <Stack divider={<StackDivider />} spacing="4">
+            <Box>
+              <Heading size="xs" textTransform="uppercase">
+                Description
+              </Heading>
+              <MarkDown>{content}</MarkDown>
+            </Box>
             {isResolved && (
-              <Button onClick={() => deleteTicket(props.id)}>
-                Delete
-              </Button>
+              <Box>
+                <Heading size="xs" textTransform="uppercase">
+                  Response
+                </Heading>
+                {response && <Text size="md">{response}</Text>}
+              </Box>
             )}
+            <Box>
+              <Heading size="xs" textTransform="uppercase">
+                Author
+              </Heading>
+              <Text size="md">{authorName}</Text>
+            </Box>
           </Stack>
-        </form>
-      </Flex>
-      <style jsx>{`
-        .page {
-          background: white;
-          padding: 3rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+        </CardBody>
+      </Card>
+      <form onSubmit={submitData}>
+        <FormControl isRequired>
+          {!isResolved && (
+            <>
+              <FormLabel>Status</FormLabel>
 
-        input[type="text"],
-        textarea {
-          width: 100%;
-          padding: 0.5rem;
-          margin: 0.5rem 0;
-          border-radius: 0.25rem;
-          border: 0.125rem solid rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="submit"] {
-          background: #ececec;
-          border: 0;
-          padding: 1rem 2rem;
-        }
-
-        .back {
-          margin-left: 1rem;
-        }
-      `}</style>
+              <Select
+                onChange={(e) => setStatus(e.target.value)}
+                placeholder="Select option"
+                value={updatedStatus}
+                required
+              >
+                <option value="new">New</option>
+                <option value="inprogress">In Progress</option>
+                <option value="resolved">Resolved</option>
+              </Select>
+            </>
+          )}
+          {!isResolved && (
+            <>
+              <FormLabel>Response</FormLabel>
+              <Textarea
+                value={response}
+                onChange={(e) => setResponse(e.target.value)}
+                placeholder="Typical response"
+                size="sm"
+              />
+            </>
+          )}
+        </FormControl>
+        <HStack>
+          {!isResolved && (
+            <Button
+              color="blue"
+              disabled={!updatedStatus || !response}
+              type="submit"
+            >
+              Respond
+            </Button>
+          )}
+          {isResolved && (
+            <Button onClick={() => deleteTicket(props.id)}>Delete</Button>
+          )}
+          <Spacer />
+          <Button onClick={() => Router.push("/")}>Cancel</Button>
+        </HStack>
+      </form>
     </Layout>
   );
 };

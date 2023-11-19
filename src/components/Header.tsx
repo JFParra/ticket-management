@@ -3,17 +3,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { logger } from "@lib/logger";
-import { Button, HStack } from "@chakra-ui/react";
+import { Avatar, Button, HStack, Spacer, Stack } from "@chakra-ui/react";
 
 const Header: React.FC = () => {
   const router = useRouter();
 
   const { data: session, status } = useSession();
-  let left = (
-    <Link href="/" passHref>
-      <Button>Home</Button>
-    </Link>
-  );
+  let left = <Button onClick={() => router.push("/")}>Home</Button>;
 
   let right = null;
 
@@ -39,14 +35,12 @@ const Header: React.FC = () => {
   }
 
   if (session) {
+    const user = `${session.user.email}`;
     right = (
-      <HStack>
-        <p>
-          {session.user.name} ({session.user.email})
-        </p>
-        <Link href="/create" passHref>
-          <Button>New Ticket</Button>
-        </Link>
+      <HStack flex="1">
+        <Button onClick={() => router.push("/create")}>New Ticket</Button>
+        <Spacer />
+
         <Button
           onClick={() => {
             logger.debug("callbackUrl: ", router.basePath);
@@ -57,11 +51,20 @@ const Header: React.FC = () => {
         </Button>
       </HStack>
     );
+
+    left = (
+      <HStack flex="1">
+        <Avatar iconLabel={user} name={user} />
+        <Spacer />
+        <Button onClick={() => router.push("/")}>Home</Button>
+      </HStack>
+    );
   }
 
   return (
     <nav>
       <HStack
+        wrap={"wrap"}
         p={5}
         justify="space-between"
         borderBottom="1px solid"

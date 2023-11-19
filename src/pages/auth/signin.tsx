@@ -124,11 +124,11 @@ export default function SimpleCard() {
                   <Button
                     isLoading={isSubmitting}
                     loadingText="Signing in..."
-                    bg={"blue.400"}
+                    bg={"purple.400"}
                     color={"white"}
                     type="submit"
                     _hover={{
-                      bg: "blue.500",
+                      bg: "purple.500",
                     }}
                   >
                     Sign in
@@ -138,7 +138,7 @@ export default function SimpleCard() {
                   <Text align={"center"}>
                     Not a user yet?{" "}
                     <Link
-                      color={"blue.400"}
+                      color={"purple.400"}
                       href={`signup${
                         router.query.callbackUrl
                           ? `?callbackUrl=${router.query.callbackUrl}`
